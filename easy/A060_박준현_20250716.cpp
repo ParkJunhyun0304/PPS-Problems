@@ -1,56 +1,40 @@
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
+#include <iostream>
+#include <vector>
 #include <string.h>
 
 using namespace std;
 
-char* solution(int a, int b) {
-    // 리턴할 값은 메모리를 동적 할당해주세요.
-    char* answer = (char*)malloc(4*sizeof(char));
-    
-    int day = 4;
-    day += (a-1)*31 + b;
-    
-    for(int i=1; i<a; i++) {
-        switch(i){
-            case 2:
-                day -= 2;
-                break;
-            case 4:
-            case 6:
-            case 9:
-            case 11:
-                day -= 1;
-                break;
-        }
-    }
+class Solution {
+public:
+    int calPoints(vector<string>& operations) {
+        vector<int> nums;
+        int result = 0;
 
-    day = day%7;
-    switch(day) {
-        case 0:
-            strcpy(answer, "SUN");
-            break;
-        case 1:
-            strcpy(answer, "MON");
-            break;
-        case 2:
-            strcpy(answer, "TUE");
-            break;
-        case 3:
-            strcpy(answer, "WED");
-            break;
-        case 4:
-            strcpy(answer, "THU");
-            break;
-        case 5:
-            strcpy(answer, "FRI");
-            break;
-        case 6:
-            strcpy(answer, "SAT");
-            break;
+        for(string ops : operations) {
+            if(ops == "C") {
+                nums.pop_back();
+            } else if(ops == "D") {
+                int num = nums.back();
+                nums.push_back(num*2);
+            } else if(ops == "+") {
+                int num1 = nums.back();
+                nums.pop_back();
+                int num2 = nums.back();
+                nums.push_back(num1);
+                nums.push_back(num1+num2);
+            } else {
+                nums.push_back(stoi(ops));
+            }
+        }
+
+        if(nums.size() == 0) {
+            return 0;
+        } else {
+            for(int n : nums) {
+                result += n;
+            }
+        }
+        
+        return result;
     }
-    
-    
-    return answer;
-}
+};
